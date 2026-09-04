@@ -1,0 +1,102 @@
+/* ============================================================
+   MTA DevDashboard — Animations
+   Respects prefers-reduced-motion and the "reduce motion"
+   setting (html.reduce-motion).
+   ============================================================ */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes drawer-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(24px); }
+}
+
+@keyframes menu-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes grow-bar {
+  from { width: 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes ring {
+  0% { box-shadow: 0 0 0 0 var(--accent-soft-hover); }
+  100% { box-shadow: 0 0 0 10px transparent; }
+}
+
+/* Theme transition */
+html.theme-anim body,
+html.theme-anim .sidebar,
+html.theme-anim .app-header,
+html.theme-anim .page,
+html.theme-anim .card,
+html.theme-anim .stat-card,
+html.theme-anim .modal {
+  transition: background-color var(--dur-med) var(--ease),
+    color var(--dur-med) var(--ease),
+    border-color var(--dur-med) var(--ease);
+}
+
+/* App button press */
+.btn:active, .icon-btn:active { transform: translateY(1px) scale(0.99); }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Manual "reduce motion" setting overrides even system preference */
+html.reduce-motion *,
+html.reduce-motion *::before,
+html.reduce-motion *::after {
+  animation: none !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Chart draw-in (driven via JS adding .ready) */
+.chart-enter { animation: page-in var(--dur-slow) var(--ease) both; }
+
+/* Sidebar drawer open/close handled by transform in responsive.css */

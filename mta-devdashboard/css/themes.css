@@ -1,0 +1,148 @@
+/* ============================================================
+   MTA DevDashboard — Themes
+   Ivory Light  /  Charcoal Dark
+   ============================================================ */
+
+/* ---------- IVORY LIGHT ---------- */
+html[data-theme="ivory"] {
+  color-scheme: light;
+
+  --bg: #f8f5ef;
+  --bg-header: rgba(251, 249, 244, 0.72);
+  --surface-1: #ffffff;
+  --surface-2: #fcfaf5;
+  --surface-3: #f2eee4;
+  --surface-4: #e9e4d8;
+  --sidebar-bg: #f1ece1;
+  --sidebar-hover: rgba(38, 34, 27, 0.05);
+  --overlay: rgba(46, 40, 30, 0.42);
+
+  --text-1: #29241c;
+  --text-2: #5d5548;
+  --text-3: #8b8273;
+
+  --border: rgba(41, 36, 28, 0.09);
+  --border-strong: rgba(41, 36, 28, 0.17);
+
+  --accent: #55715e;
+  --accent-hover: #47604f;
+  --accent-soft: rgba(85, 113, 94, 0.12);
+  --accent-soft-hover: rgba(85, 113, 94, 0.18);
+  --accent-text: #f9f8f4;
+
+  --success: #3e7a55;
+  --success-soft: rgba(62, 122, 85, 0.12);
+  --success-text: #2c5c3f;
+  --warning: #9a7424;
+  --warning-soft: rgba(154, 116, 36, 0.13);
+  --warning-text: #7c5a18;
+  --danger: #a6534a;
+  --danger-soft: rgba(166, 83, 74, 0.11);
+  --danger-text: #8c4038;
+  --info: #476785;
+  --info-soft: rgba(71, 103, 133, 0.12);
+  --info-text: #35506b;
+
+  --glass-bg: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.72),
+    rgba(255, 255, 255, 0.46)
+  );
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-hi: rgba(255, 255, 255, 0.85);
+
+  --shadow-sm: 0 1px 2px rgba(41, 36, 28, 0.05),
+    0 2px 6px rgba(41, 36, 28, 0.045);
+  --shadow-md: 0 2px 4px rgba(41, 36, 28, 0.06),
+    0 10px 26px rgba(41, 36, 28, 0.09);
+  --shadow-lg: 0 6px 16px rgba(41, 36, 28, 0.1),
+    0 24px 60px rgba(41, 36, 28, 0.16);
+  --shadow-accent: 0 4px 14px rgba(85, 113, 94, 0.32);
+
+  --chart-grid: rgba(41, 36, 28, 0.08);
+  --focus-ring: 0 0 0 3px rgba(85, 113, 94, 0.3);
+  --code-bg: rgba(41, 36, 28, 0.055);
+  --table-stripe: rgba(41, 36, 28, 0.028);
+  --mark: rgba(154, 116, 36, 0.28);
+}
+
+/* ---------- CHARCOAL DARK ---------- */
+html[data-theme="charcoal"] {
+  color-scheme: dark;
+
+  --bg: #181818;
+  --bg-header: rgba(28, 28, 28, 0.72);
+  --surface-1: #202020;
+  --surface-2: #262626;
+  --surface-3: #2d2d2d;
+  --surface-4: #363636;
+  --sidebar-bg: #1d1d1d;
+  --sidebar-hover: rgba(237, 231, 220, 0.055);
+  --overlay: rgba(0, 0, 0, 0.62);
+
+  --text-1: #ede7dc;
+  --text-2: #b0a99b;
+  --text-3: #7c766a;
+
+  --border: rgba(237, 231, 220, 0.09);
+  --border-strong: rgba(237, 231, 220, 0.17);
+
+  --accent: #96ac9b;
+  --accent-hover: #a9bdaa;
+  --accent-soft: rgba(150, 172, 155, 0.14);
+  --accent-soft-hover: rgba(150, 172, 155, 0.22);
+  --accent-text: #171a17;
+
+  --success: #7fb392;
+  --success-soft: rgba(127, 179, 146, 0.15);
+  --success-text: #a3d0b1;
+  --warning: #d0a44e;
+  --warning-soft: rgba(208, 164, 78, 0.15);
+  --warning-text: #e2c37b;
+  --danger: #da8279;
+  --danger-soft: rgba(218, 130, 121, 0.15);
+  --danger-text: #eba89f;
+  --info: #7fa2c0;
+  --info-soft: rgba(127, 162, 192, 0.15);
+  --info-text: #a5c2da;
+
+  --glass-bg: linear-gradient(
+    160deg,
+    rgba(44, 44, 44, 0.66),
+    rgba(32, 32, 32, 0.5)
+  );
+  --glass-border: rgba(237, 231, 220, 0.1);
+  --glass-hi: rgba(237, 231, 220, 0.08);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.4),
+    0 12px 30px rgba(0, 0, 0, 0.42);
+  --shadow-lg: 0 6px 18px rgba(0, 0, 0, 0.5),
+    0 30px 70px rgba(0, 0, 0, 0.55);
+  --shadow-accent: 0 4px 16px rgba(150, 172, 155, 0.22);
+
+  --chart-grid: rgba(237, 231, 220, 0.09);
+  --focus-ring: 0 0 0 3px rgba(150, 172, 155, 0.35);
+  --code-bg: rgba(237, 231, 220, 0.06);
+  --table-stripe: rgba(237, 231, 220, 0.025);
+  --mark: rgba(208, 164, 78, 0.3);
+}
+
+/* Chart colors differ slightly per theme for contrast. */
+html[data-theme="ivory"] {
+  --chart-1: #55715e;
+  --chart-2: #b9823f;
+  --chart-3: #5b7c9e;
+  --chart-4: #b05f54;
+  --chart-5: #7b6d9f;
+  --chart-6: #4d818c;
+}
+html[data-theme="charcoal"] {
+  --chart-1: #9db4a2;
+  --chart-2: #d3a963;
+  --chart-3: #8fa9c4;
+  --chart-4: #d0897d;
+  --chart-5: #a79bc8;
+  --chart-6: #82b8bf;
+}
