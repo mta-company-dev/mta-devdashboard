@@ -8,12 +8,6 @@
   Built with <strong>HTML5</strong>, <strong>CSS3</strong> and <strong>Vanilla JavaScript</strong> — no frameworks, no backend, no external database.
 </p>
 
-<p align="center">
-  <a href="https://mta-company-dev.github.io/mta-devdashboard/">
-    <strong>🚀 Live Demo</strong>
-  </a>
-</p>
-
 ---
 
 ## 📌 Overview
@@ -35,7 +29,7 @@ All application data is stored locally in the browser using **`localStorage`**.
 
 ---
 
-## 🌐 Live Demo
+## 🌐 Live Dashboard
 
 ### 🚀 Public Dashboard
 
@@ -482,20 +476,6 @@ Possible future improvements include:
 * [ ] Advanced data backup options
 * [ ] Optional backend version
 * [ ] Multi-device synchronization
-
----
-
-# 📸 Screenshots
-
-Screenshots can be added here as the project UI evolves.
-
-Example:
-
-```md
-![Dashboard](screenshots/dashboard.png)
-![Projects](screenshots/projects.png)
-![Calendar](screenshots/calendar.png)
-```
 
 ---
 
