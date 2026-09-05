@@ -281,17 +281,36 @@
     MTA.activity.track('navigation', 'Opened ' + page + ' section', { page: page });
   };
 
+  var clockTimer = null;
+
   function startClock() {
-    var el = document.getElementById('hdr-clock');
-    if (!el) return;
     function tick() {
+      var el = document.getElementById('hdr-clock');
+
+      if (!el) return;
+
       var d = new Date();
-      el.innerHTML = U.icon('ic-clock') + ' ' + U.fmtTime(d) + ' <span class="tiny muted">' +
-        d.getDate() + ' ' + U.monthName(d.getMonth()).slice(0, 3) + '</span>';
+
+      el.innerHTML =
+        U.icon('ic-clock') +
+        ' ' +
+        U.fmtTime(d) +
+        ' <span class="tiny muted">' +
+        d.getDate() +
+        ' ' +
+        U.monthName(d.getMonth()).slice(0, 3) +
+        '</span>';
+
       el.title = U.fmtDateTime(d);
     }
+
     tick();
-    setInterval(tick, 30000);
+
+    if (clockTimer) {
+      clearInterval(clockTimer);
+    }
+
+    clockTimer = setInterval(tick, 1000);
   }
 
   function initNetwork() {

@@ -176,77 +176,17 @@
 
     /* ---- Projects ---- */
     var projects = [
-      {
-        id: 'prj_1', name: 'MTA DevDashboard', description: 'Internal developer command center — the app you are using right now.',
-        category: 'Web App', tags: ['dashboard', 'javascript', 'local-first'], status: 'Development',
-        priority: 'High', progress: 62, startDate: dayStr(64), deadline: dayStr(24),
-        repoUrl: 'https://github.com/mta/devdashboard', liveUrl: 'https://dashboard.mta.app',
-        localPath: 'E:/Projects/mta-devdashboard', notes: 'Glass UI, localStorage persistence. Charts module still in review.',
-        favorite: true, createdAt: iso(daysAgo(64)), updatedAt: iso(daysAgo(1))
-      },
-      {
-        id: 'prj_2', name: 'REST API Gateway', description: 'Unified gateway for internal microservices with auth + rate limiting.',
-        category: 'Back-end', tags: ['node', 'api', 'gateway'], status: 'Testing',
-        priority: 'High', progress: 81, startDate: dayStr(80), deadline: dayStr(10),
-        repoUrl: 'https://github.com/mta/gateway', liveUrl: '', localPath: 'E:/Projects/api-gateway',
-        notes: 'Load tests passed 12k rps.', favorite: false,
-        createdAt: iso(daysAgo(80)), updatedAt: iso(daysAgo(2))
-      },
-      {
-        id: 'prj_3', name: 'Mobile Companion App', description: 'Companion app for field engineers. Offline-first sync.',
-        category: 'Mobile', tags: ['react-native', 'offline'], status: 'Planning',
-        priority: 'Medium', progress: 12, startDate: dayStr(30), deadline: dayStr(60),
-        repoUrl: 'https://github.com/mta/mobile-app', liveUrl: '', localPath: 'E:/Projects/mobile-app',
-        notes: 'Design tokens finalized. Awaiting API contracts.', favorite: false,
-        createdAt: iso(daysAgo(30)), updatedAt: iso(daysAgo(4))
-      },
-      {
-        id: 'prj_4', name: 'Marketing Site Redesign', description: 'Company site refresh — SSG, SEO, analytics.',
-        category: 'Web Site', tags: ['eleventy', 'seo'], status: 'Archived',
-        priority: 'Low', progress: 100, startDate: dayStr(150), deadline: dayStr(70),
-        repoUrl: 'https://github.com/mta/site', liveUrl: 'https://mta.app', localPath: 'E:/Projects/site',
-        notes: 'Shipped in March. Archived.', favorite: false,
-        createdAt: iso(daysAgo(150)), updatedAt: iso(daysAgo(70))
-      },
-      {
-        id: 'prj_5', name: 'CI/CD Pipeline', description: 'Automated build, test and deploy for all repos.',
-        category: 'DevOps', tags: ['github-actions', 'docker'], status: 'Testing',
-        priority: 'High', progress: 75, startDate: dayStr(45), deadline: dayStr(15),
-        repoUrl: 'https://github.com/mta/pipeline', liveUrl: '', localPath: 'E:/Projects/pipeline',
-        notes: 'Matrix builds enabled.', favorite: true,
-        createdAt: iso(daysAgo(45)), updatedAt: iso(daysAgo(3))
-      },
-      {
-        id: 'prj_6', name: 'Internal Tools Hub', description: 'Single entry point for internal tools and docs.',
-        category: 'Internal Tool', tags: ['portal', 'docs'], status: 'Deployed',
-        priority: 'Medium', progress: 100, startDate: dayStr(120), deadline: dayStr(40),
-        repoUrl: 'https://github.com/mta/tools-hub', liveUrl: '', localPath: 'E:/Projects/tools-hub',
-        notes: 'Live for the whole company.', favorite: false,
-        createdAt: iso(daysAgo(120)), updatedAt: iso(daysAgo(20))
-      }
+
     ];
 
     /* ---- Tasks ---- */
     var tasks = [
-      { id: 'tsk_1', title: 'Chart toolkit: line and bar renderers', description: 'Canvas renderers with hover tooltips.', projectId: 'prj_1', priority: 'High', status: 'In Progress', dueDate: dayStr(-3), tags: ['charts'], createdAt: iso(daysAgo(9)), completedAt: null },
-      { id: 'tsk_2', title: 'Shortcut conflict detection', description: 'Warn when two actions share a combo.', projectId: 'prj_1', priority: 'Medium', status: 'Todo', dueDate: dayStr(4), tags: ['settings'], createdAt: iso(daysAgo(5)), completedAt: null },
-      { id: 'tsk_3', title: 'Add OpenTelemetry tracing', description: 'Inject tracing context through middleware.', projectId: 'prj_2', priority: 'Critical', status: 'In Progress', dueDate: dayStr(-1), tags: ['otel'], createdAt: iso(daysAgo(12)), completedAt: null },
-      { id: 'tsk_4', title: 'Rate limiter token bucket', description: 'Per-key token bucket.', projectId: 'prj_2', priority: 'High', status: 'Review', dueDate: dayStr(2), tags: ['api'], createdAt: iso(daysAgo(14)), completedAt: null },
-      { id: 'tsk_5', title: 'Offline sync queue', description: 'Queue events when offline.', projectId: 'prj_3', priority: 'Medium', status: 'Todo', dueDate: dayStr(12), tags: ['offline'], createdAt: iso(daysAgo(3)), completedAt: null },
-      { id: 'tsk_6', title: 'Deploy to staging', description: 'Ship alpha build to staging env.', projectId: 'prj_5', priority: 'High', status: 'Review', dueDate: dayStr(1), tags: ['deploy'], createdAt: iso(daysAgo(6)), completedAt: null },
-      { id: 'tsk_7', title: 'Write migration script', description: 'Versioned data migrations.', projectId: 'prj_6', priority: 'Low', status: 'Done', dueDate: dayStr(-8), tags: ['devops'], createdAt: iso(daysAgo(20)), completedAt: iso(daysAgo(8)) },
-      { id: 'tsk_8', title: 'Update sensor dashboard charts', description: 'Refresh metrics cards.', projectId: 'prj_6', priority: 'Medium', status: 'Done', dueDate: dayStr(-6), tags: ['dashboard'], createdAt: iso(daysAgo(15)), completedAt: iso(daysAgo(6)) },
-      { id: 'tsk_9', title: 'SEO audit pass', description: 'Metadata and alt text.', projectId: 'prj_4', priority: 'Low', status: 'Done', dueDate: dayStr(-20), tags: ['seo'], createdAt: iso(daysAgo(30)), completedAt: iso(daysAgo(20)) },
-      { id: 'tsk_10', title: 'Review pull request: editor toolbar', description: 'Check formatting commands.', projectId: 'prj_1', priority: 'Medium', status: 'Done', dueDate: dayStr(-2), tags: ['review'], createdAt: iso(daysAgo(7)), completedAt: iso(daysAgo(2)) }
+    
     ];
 
     /* ---- Notes ---- */
     var notes = [
-      { id: 'nt_1', title: 'Deployment runbook', subtitle: 'Checklist for safe shipping', category: 'DevOps', tags: ['deploy', 'runbook'], content: '<h2>Pre-flight</h2><ul><li>Confirm CI is green</li><li>Backup the database</li></ul><blockquote>Never deploy on a Friday.</blockquote>', pinned: true, favorite: true, createdAt: iso(daysAgo(40)), updatedAt: iso(daysAgo(1)) },
-      { id: 'nt_2', title: 'Chart color palette', subtitle: 'Accessible pairings for canvas', category: 'Design', tags: ['charts', 'a11y'], content: '<p>Sage green works on ivory and charcoal.</p><p>Keep labels at 10.5px minimum.</p>', pinned: false, favorite: true, createdAt: iso(daysAgo(12)), updatedAt: iso(daysAgo(6)) },
-      { id: 'nt_3', title: 'API conventions', subtitle: 'REST style guide', category: 'Back-end', tags: ['api'], content: '<h3>Naming</h3><pre><code>GET /v1/projects/:id</code></pre><p>Use kebab-case collection names.</p>', pinned: false, favorite: false, createdAt: iso(daysAgo(55)), updatedAt: iso(daysAgo(10)) },
-      { id: 'nt_4', title: 'Meeting notes', subtitle: 'Q3 goals', category: 'General', tags: ['meetings'], content: '<p>Discuss Q3 priorities and MVP scope for the mobile app.</p>', pinned: false, favorite: false, createdAt: iso(daysAgo(18)), updatedAt: iso(daysAgo(3)) },
-      { id: 'nt_5', title: 'localStorage notes', subtitle: 'About 5MB per origin.', category: 'Research', tags: ['storage'], content: '<p>Store JSON. Compact indexes. Watch the 5MB quota.</p>', pinned: false, favorite: false, createdAt: iso(daysAgo(7)), updatedAt: iso(daysAgo(7)) }
+      
     ];
 
     /* ---- Calendar events ---- */
