@@ -1,139 +1,801 @@
+
 /* ============================================================
-   MTA DevDashboard — Responsive
-   Desktop > 1280 | Laptop ~1024 | Tablet ~768 | Mobile < 640
+   MTA DevDashboard
+   Desktop | Tablet | Mobile
    ============================================================ */
 
-@media (max-width: 1280px) {
-  .cal-cell { min-height: 92px; }
+
+/* ============================================================
+   1. GLOBAL RESPONSIVE SAFETY
+   ============================================================ */
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
 }
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  max-width: 100%;
+}
+
+
+/* ============================================================
+   2. LARGE DESKTOP
+   ============================================================ */
+
+@media (min-width: 1400px) {
+
+  #app-main {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .page-wrap {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .dash-grid,
+  .dashboard-grid {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+  }
+}
+
+
+/* ============================================================
+   3. TABLET / SMALL LAPTOP
+   ============================================================ */
 
 @media (max-width: 1100px) {
-  .dash-charts { grid-template-columns: 1fr; }
-  .notes-layout { grid-template-columns: 270px 1fr; }
-  .settings-wrap { grid-template-columns: 190px 1fr; }
+
+  /* ---------- Main ---------- */
+
+  #app-main {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+
+  /* ---------- Dashboard ---------- */
+
+  .dash-grid,
+  .dashboard-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .stats-grid,
+  .stat-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  /* ---------- Generic grids ---------- */
+
+  .grid-4 {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-3 {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  /* ---------- Header ---------- */
+
+  .hdr-actions {
+    gap: 6px;
+  }
+
+  .hdr-chip {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .wifi-chip {
+    display: none;
+  }
+
+
+  /* ---------- Tables ---------- */
+
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 680px;
+  }
+
+
+  /* ---------- Cards ---------- */
+
+  .card {
+    min-width: 0;
+  }
+
+
+  /* ---------- Calendar ---------- */
+
+  .cal-grid {
+    min-width: 680px;
+  }
+
+  .cal {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
-/* Tablet & below: sidebar becomes a drawer */
+
+/* ============================================================
+   4. TABLET
+   ============================================================ */
+
 @media (max-width: 900px) {
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    transform: translateX(-100%);
-    width: var(--sidebar-w) !important;
-    box-shadow: var(--shadow-lg);
+
+  /* ---------- Sidebar ---------- */
+
+  html.sb-collapsed .sidebar {
+    width: 0;
   }
-  html.sb-open .sidebar { transform: translateX(0); }
-  html.sb-open .sidebar-backdrop { opacity: 1; pointer-events: auto; }
-  html.sb-collapsed .sidebar { width: var(--sidebar-w) !important; }
-  html.sb-collapsed .sb-label,
-  html.sb-collapsed .sb-brand-text,
-  html.sb-collapsed .sb-group,
-  html.sb-collapsed .sb-foot p,
-  html.sb-collapsed .sb-link .kbd-hint { display: block; }
-  html.sb-collapsed .sb-link { justify-content: flex-start; }
-  html.sb-collapsed .sb-foot { padding: var(--sp-3); }
-  html.sb-collapsed .sb-brand { justify-content: space-between; padding: 0 var(--sp-4); }
-  html.sb-collapsed .sb-brand span, html.sb-collapsed .sb-brand b { display: block; }
 
-  .btn-sidebar-collapse { display: none; }
 
-  .notes-layout { grid-template-columns: 1fr; height: auto; min-height: 0; }
-  .notes-list { max-height: 320px; }
-  .note-edit-wrap { height: calc(100dvh - var(--header-h) - 280px); min-height: 360px; }
+  /* ---------- Main layout ---------- */
 
-  .settings-wrap { grid-template-columns: 1fr; }
-  .settings-nav { position: static; flex-direction: row; flex-wrap: wrap; gap: 6px; }
-  .settings-nav .sn-group { display: none; }
-  .settings-nav button { width: auto; }
+  #shell {
+    display: block;
+  }
 
-  .form-grid { grid-template-columns: 1fr; }
-  .form-grid .span2 { grid-column: auto; }
+  #app-main {
+    width: 100%;
+    padding: 18px;
+    padding-bottom: 90px;
+  }
 
-  .hdr-chip.clock-chip { display: none; }
-}
 
-/* Mobile */
-@media (max-width: 640px) {
-  :root { --header-h: 56px; }
-  .page { padding: var(--sp-4) var(--sp-4) calc(var(--bottom-nav-h) + var(--sp-4)); }
-  .page-head h2 { font-size: var(--fs-2xl); }
-  .page-head { align-items: flex-start; flex-direction: column; }
+  /* ---------- Header ---------- */
 
-  .bottom-nav { display: flex; }
-  .app-main { order: 0; }
-  .app-header { padding: 0 var(--sp-3); gap: var(--sp-2); }
+  #app-header {
+    min-height: 64px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
 
-  .hdr-greeting .g-sub { display: none; }
-  .hdr-chip.status-chip { display: none; }
-  .hdr-chip.wifi-chip { display: none; }
-  .hdr-avatar { width: 34px; height: 34px; }
+  .hdr-greeting {
+    min-width: 0;
+    flex: 1;
+  }
 
-  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: var(--sp-3); }
-  .stat-card { padding: var(--sp-3); min-height: 84px; flex-direction: column; }
-  .stat-icon { width: 36px; height: 36px; }
-  .stat-value { font-size: var(--fs-xl); }
+  .hdr-greeting > div {
+    min-width: 0;
+  }
 
-  .quick-actions { grid-template-columns: 1fr; }
-  .pj-grid { grid-template-columns: 1fr; }
-  .pj-row { flex-wrap: wrap; gap: var(--sp-2); }
-  .pj-row .pj-row-progress { width: 100%; }
-  .task-item { flex-wrap: wrap; }
-  .task-meta { margin-left: 0; width: 100%; }
+  .g-title,
+  .g-sub {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-  .modal-overlay { padding: 0; align-items: flex-end; }
+  .clock-chip {
+    display: inline-flex;
+  }
+
+  .status-chip {
+    display: none;
+  }
+
+
+  /* ---------- Dashboard ---------- */
+
+  .dash-grid,
+  .dashboard-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .stats-grid,
+  .stat-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  /* ---------- Page header ---------- */
+
+  .page-head {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .page-actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+
+  /* ---------- Forms ---------- */
+
+  .form-grid,
+  .fields-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  /* ---------- Modal ---------- */
+
   .modal {
-    width: 100% !important;
-    max-height: calc(100dvh - 40px);
-    border-radius: var(--radius-l) var(--radius-l) 0 0;
-    animation-name: modal-sheet;
-  }
-  @keyframes modal-sheet {
-    from { transform: translateY(60px); opacity: 0.6; }
-    to { transform: translateY(0); opacity: 1; }
+    width: min(94vw, 720px);
+    max-height: 90vh;
   }
 
-  .drawer { width: 100%; }
 
-  .toast-root { top: auto; bottom: calc(var(--bottom-nav-h) + 12px); right: 12px; left: 12px; max-width: none; }
-  .toast { animation-name: toast-in-mob; }
-  @keyframes toast-in-mob {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* ---------- Calendar ---------- */
+
+  .cal-head {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--surface-1);
+    padding-bottom: 10px;
   }
 
-  .palette-overlay { padding-top: 8vh; }
-  .palette { max-height: 76vh; }
+  .cal-week {
+    min-width: 720px;
+  }
 
-  .toolbar .searchbox { width: 100%; flex: 1 1 100%; }
-  .cal-cell { min-height: 72px; }
-  .cal-cell .day-num { width: 19px; height: 19px; font-size: 11px; }
-  .cal-week { min-width: 720px; }
-  .feed-custom { margin-left: 0; width: 100%; flex-wrap: wrap; }
-  .feed-custom .input { flex: 1; width: auto; }
-  .hdr-greeting { display: none; }
-  .settings-row { flex-direction: column; align-items: stretch; gap: var(--sp-2); }
-  .settings-row .sr-control { min-width: 0; max-width: 100%; width: 100%; }
+  .cal-week.mode-day {
+    min-width: 0;
+  }
 }
 
-/* Small phones */
-@media (max-width: 420px) {
-  .stats-grid { grid-template-columns: 1fr; }
-  .cal-cell { min-height: 62px; }
-  .page-head-actions .btn { width: 100%; }
+
+/* ============================================================
+   5. MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+  /* ---------- Global ---------- */
+
+  body {
+    font-size: 14px;
+  }
+
+  #app-main {
+    padding: 12px;
+    padding-bottom: 82px;
+  }
+
+
+  /* ==========================================================
+     HEADER
+     ========================================================== */
+
+  #app-header {
+    min-height: 58px;
+    height: auto;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .hdr-greeting {
+    gap: 8px;
+  }
+
+  .hdr-avatar {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+
+  .g-title {
+    font-size: 13px;
+  }
+
+  .g-sub {
+    font-size: 10px;
+  }
+
+  .hdr-actions {
+    gap: 4px;
+  }
+
+  .hdr-actions .icon-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .clock-chip {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .clock-chip .tiny {
+    display: none;
+  }
+
+
+  /* ==========================================================
+     PAGE HEADER
+     ========================================================== */
+
+  .page-head {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+
+  .page-subtitle {
+    font-size: 12px;
+  }
+
+  .page-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .page-actions .btn {
+    width: 100%;
+  }
+
+
+  /* ==========================================================
+     DASHBOARD
+     ========================================================== */
+
+  .dash-grid,
+  .dashboard-grid,
+  .stats-grid,
+  .stat-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .dash-card,
+  .stat-card {
+    min-height: auto;
+  }
+
+
+  /* ==========================================================
+     GENERIC GRIDS
+     ========================================================== */
+
+  .grid-4,
+  .grid-3,
+  .grid-2,
+  .form-grid,
+  .fields-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* ==========================================================
+     CARDS
+     ========================================================== */
+
+  .card {
+    border-radius: var(--radius-m);
+    padding: 14px;
+  }
+
+  .card-head {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+
+  /* ==========================================================
+     BUTTONS
+     ========================================================== */
+
+  .btn {
+    min-height: 38px;
+  }
+
+  .btn-lg {
+    min-height: 42px;
+  }
+
+
+  /* ==========================================================
+     INPUTS
+     ========================================================== */
+
+  .input,
+  .textarea,
+  select {
+    width: 100%;
+    min-height: 40px;
+  }
+
+
+  /* ==========================================================
+     TABLES
+     ========================================================== */
+
+  .table-wrap {
+    width: calc(100vw - 24px);
+    overflow-x: auto;
+    border-radius: var(--radius-s);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 680px;
+  }
+
+
+  /* ==========================================================
+     LISTS
+     ========================================================== */
+
+  .list-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .list-row-main {
+    min-width: 0;
+    width: 100%;
+  }
+
+
+  /* ==========================================================
+     MODALS
+     ========================================================== */
+
+  .modal-backdrop {
+    padding: 10px;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: none;
+    max-height: calc(100vh - 20px);
+    border-radius: var(--radius-m);
+  }
+
+  .modal-head {
+    padding: 14px;
+  }
+
+  .modal-body {
+    padding: 14px;
+    overflow-y: auto;
+  }
+
+  .modal-foot {
+    padding: 12px 14px;
+    display: grid;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .modal-foot .btn {
+    width: 100%;
+  }
+
+
+  /* ==========================================================
+     CALENDAR — MONTH
+     ========================================================== */
+
+  .cal {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .cal-head {
+    position: static;
+  }
+
+  .cal-title {
+    font-size: 18px;
+  }
+
+  .cal-grid {
+    min-width: 620px;
+  }
+
+  .cal-cell {
+    min-height: 82px;
+    padding: 5px;
+  }
+
+  .cal-weekday {
+    min-height: 34px;
+    font-size: 9px;
+  }
+
+  .day-num {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+
+  .cal-event {
+    min-height: 18px;
+    padding: 2px 4px;
+    font-size: 8.5px;
+  }
+
+
+  /* ==========================================================
+     CALENDAR — WEEK
+     ========================================================== */
+
+  .cal-week {
+    min-width: 760px;
+  }
+
+  .cal-week.mode-day {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .cal-week.mode-day .cal-week-day {
+    min-width: 0;
+  }
+
+
+  /* ==========================================================
+     BOTTOM NAV
+     ========================================================== */
+
+  #bottom-nav {
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    z-index: 1000;
+
+    display: grid;
+    grid-template-columns:
+      repeat(5, minmax(0, 1fr));
+
+    min-height: 58px;
+
+    padding: 5px;
+
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    box-shadow: var(--shadow-lg);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .bn-item {
+    min-width: 0;
+    min-height: 48px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 2px;
+
+    padding: 4px;
+
+    border-radius: 10px;
+
+    font-size: 9px;
+    line-height: 1.1;
+
+    overflow: hidden;
+  }
+
+  .bn-item .ic {
+    width: 18px;
+    height: 18px;
+  }
+
+  .bn-item span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+
+  /* ==========================================================
+     SIDEBAR MOBILE
+     ========================================================== */
+
+  .sidebar {
+    z-index: 1100;
+  }
+
+
+  /* ==========================================================
+     SEARCH
+     ========================================================== */
+
+  .search-modal,
+  .search-box {
+    width: calc(100vw - 20px);
+    max-width: none;
+  }
+
+
+  /* ==========================================================
+     EMPTY STATES
+     ========================================================== */
+
+  .empty {
+    padding: 28px 14px;
+  }
 }
 
-/* Landscape mobile height constraint */
-@media (max-height: 520px) and (orientation: landscape) {
-  .auth-view { padding: var(--sp-3); }
-  .auth-card { padding: var(--sp-4); }
-  .auth-logo { margin-bottom: var(--sp-2); }
-  .auth-note { display: none; }
+
+/* ============================================================
+   6. VERY SMALL PHONES
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+  #app-main {
+    padding: 10px;
+    padding-bottom: 80px;
+  }
+
+  #app-header {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+
+  .hdr-avatar {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+  }
+
+  .g-title {
+    font-size: 12px;
+  }
+
+  .g-sub {
+    display: none;
+  }
+
+  .clock-chip {
+    display: none;
+  }
+
+  .hdr-actions .icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .page-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  #bottom-nav {
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+  }
+
+  .bn-item {
+    font-size: 8px;
+  }
 }
 
-/* Improve touch targets on coarse pointers */
-@media (pointer: coarse) {
-  .btn, .icon-btn, .drop-item, .sb-link, .feed-chip { min-height: 40px; }
-  .icon-btn { width: 42px; height: 42px; }
+
+/* ============================================================
+   7. LANDSCAPE MOBILE
+   ============================================================ */
+
+@media (max-width: 900px) and (orientation: landscape) {
+
+  #app-main {
+    padding-bottom: 76px;
+  }
+
+  #bottom-nav {
+    min-height: 50px;
+  }
+
+  .bn-item {
+    min-height: 40px;
+    flex-direction: row;
+    gap: 5px;
+  }
+
+  .bn-item .ic {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+
+/* ============================================================
+   8. TOUCH DEVICES
+   ============================================================ */
+
+@media (hover: none) and (pointer: coarse) {
+
+  .btn,
+  .icon-btn,
+  .sb-link,
+  .bn-item,
+  .cal-event,
+  .cal-slot {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn,
+  .icon-btn {
+    touch-action: manipulation;
+  }
+
+  .cal-event:hover,
+  .cal-slot:hover,
+  .cal-cell:hover {
+    transform: none;
+    filter: none;
+  }
+}
+
+
+/* ============================================================
+   9. REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
