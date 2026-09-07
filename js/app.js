@@ -228,9 +228,7 @@
       : '<span class="hdr-avatar">' + U.esc(U.initials(user ? (user.displayName || user.username) : '?')) + '</span>';
 
     header.innerHTML =
-      '<button class="icon-btn js-mobile-menu" aria-label="Open navigation menu" title="Navigation menu">' +
-        U.icon('ic-menu') +
-      '</button>' +
+      '<button class="icon-btn js-sidebar-toggle" aria-label="Toggle navigation">' + U.icon('ic-menu') + '</button>' +
       '<div class="hdr-greeting">' + avatar +
         '<div><div class="g-title">' + U.esc(user ? (user.displayName || user.username) : '') + '</div>' +
         '<div class="g-sub">' + U.esc(pageDef ? pageDef.label : '') + '</div></div>' +
@@ -245,91 +243,6 @@
         '<div class="drop" id="user-drop-wrap"><button class="icon-btn" id="user-drop" aria-label="Account menu" aria-haspopup="true">' + U.icon('ic-more') + '</button></div>' +
       '</div>';
 
-    U.$('.js-mobile-menu', header).addEventListener('click', function (e) {
-      e.stopPropagation();
-
-      var existing = document.getElementById('mobile-nav-menu');
-
-      if (existing) {
-        existing.remove();
-        return;
-      }
-
-      var user = MTA.state.currentUser;
-      var pages = MTA.permissions.allowedPages(user);
-
-      var mainPages = pages.filter(function (p) {
-        return p.section === 'main';
-      });
-
-      var systemPages = pages.filter(function (p) {
-        return p.section === 'system';
-      });
-
-      var menu = U.el('div', {
-        id: 'mobile-nav-menu',
-        class: 'mobile-nav-menu'
-      });
-
-      var html = '';
-
-      html += '<div class="mobile-nav-head">' +
-        '<div>' +
-          '<b>Navigation</b>' +
-          '<span>Developer Workspace</span>' +
-        '</div>' +
-        '<button class="icon-btn mobile-nav-close" aria-label="Close menu">' +
-          U.icon('ic-close') +
-        '</button>' +
-      '</div>';
-
-      if (mainPages.length) {
-        html += '<div class="mobile-nav-group">Main</div>';
-
-        mainPages.forEach(function (p) {
-          html +=
-            '<a class="mobile-nav-item" href="#/' + p.id + '" data-mobile-page="' + p.id + '">' +
-              U.icon(p.icon) +
-              '<span>' + U.esc(p.label) + '</span>' +
-            '</a>';
-        });
-      }
-
-      if (systemPages.length) {
-        html += '<div class="mobile-nav-group">System</div>';
-
-        systemPages.forEach(function (p) {
-          html +=
-            '<a class="mobile-nav-item" href="#/' + p.id + '" data-mobile-page="' + p.id + '">' +
-              U.icon(p.icon) +
-              '<span>' + U.esc(p.label) + '</span>' +
-            '</a>';
-        });
-      }
-
-      menu.innerHTML = html;
-      document.body.appendChild(menu);
-
-      var current = MTA.router.getCurrent();
-
-      menu.querySelectorAll('[data-mobile-page]').forEach(function (item) {
-        if (item.dataset.mobilePage === current) {
-          item.classList.add('active');
-        }
-
-        item.addEventListener('click', function () {
-          menu.remove();
-        });
-      });
-
-      var close = menu.querySelector('.mobile-nav-close');
-
-      if (close) {
-        close.addEventListener('click', function () {
-          menu.remove();
-        });
-      }
-    });
     U.$('#btn-search', header).addEventListener('click', APP.openSearch);
     U.$('#btn-theme', header).addEventListener('click', function () {
       MTA.state.toggleTheme();
