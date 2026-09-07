@@ -421,11 +421,11 @@
       footer: '<button class="btn" id="ev-d-edit">' + U.icon('ic-edit') + ' Edit</button>' +
         '<button class="btn btn-danger" id="ev-d-del">' + U.icon('ic-trash') + ' Delete</button>',
       onMount: function (d) {
-        U.$('#ev-d-edit', d.body).addEventListener('click', function () {
+        U.$('#ev-d-edit', d.footer).addEventListener('click', function () {
           d.close();
           openEventForm(ev);
         });
-        U.$('#ev-d-del', d.body).addEventListener('click', function () {
+        U.$('#ev-d-del', d.footer).addEventListener('click', function () {
           d.close();
           MTA.modal.confirm({ title: 'Delete event', message: 'Delete "' + ev.title + '"?', danger: true, confirmLabel: 'Delete' })
             .then(function (ok) {

@@ -37,12 +37,20 @@ All application data is stored locally in the browser using **`localStorage`**.
 
 You can open the dashboard directly in any modern browser.
 
-### 🔐 Initial Login
+### 🔐 First Run — Initial Setup
+
+On the first open there is **no predefined account**. You create the first
+account (Display Name, Username, Password, Confirm Password). That account
+automatically becomes the **Super Admin** with access to every section and
+is signed in immediately.
 
 ```text
-Username: admin
-Password: admin123
+First visit  →  Initial Setup  →  Create account  →  Dashboard
 ```
+
+There are no demo users, projects, tasks, notes, events, or activity
+records created during setup — the dashboard starts empty and only real
+work performed by you appears over time.
 
 > **Security Notice**
 >

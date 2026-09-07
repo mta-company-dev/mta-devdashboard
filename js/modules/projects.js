@@ -446,11 +446,11 @@
       footer: '<button class="btn" id="pj-d-edit">' + U.icon('ic-edit') + ' Edit</button>' +
         '<button class="btn btn-danger" id="pj-d-del">' + U.icon('ic-trash') + ' Delete</button>',
       onMount: function (d) {
-        U.$('#pj-d-edit', d.body).addEventListener('click', function () {
+        U.$('#pj-d-edit', d.footer).addEventListener('click', function () {
           d.close();
           openForm(P.get(id));
         });
-        U.$('#pj-d-del', d.body).addEventListener('click', function () {
+        U.$('#pj-d-del', d.footer).addEventListener('click', function () {
           d.close();
           MTA.modal.confirm({
             title: 'Delete project',

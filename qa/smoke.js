@@ -157,24 +157,62 @@ console.log('\n[MTA DevDashboard smoke test]');
 assert('APP.init ran', typeof MTA.app === 'object');
 assert('auth screen shown on boot (no session)', document.getElementById('auth-view').hidden === false);
 
-/* --- Storage seed --- */
-assert('users seeded', MTA.store.users().length >= 1);
-const seededAdmin = MTA.store.users().find(u => u.username === 'admin');
-assert('initial admin exists', !!seededAdmin);
-assert('initial admin is Super Admin', seededAdmin.role === 'super_admin');
-assert('sample projects seeded', MTA.store.projects().length >= 4);
-assert('sample notes seeded', MTA.store.notes().length >= 3);
-assert('sample tasks seeded', MTA.store.tasks().length >= 5);
-assert('sample events seeded', MTA.store.events().length >= 4);
-assert('activity seeded', MTA.store.activity().length > 0);
+/* --- Storage seed (initial setup, no default account / demo data) --- */
+assert('no users on first boot', MTA.store.users().length === 0);
+assert('no demo projects', MTA.store.projects().length === 0);
+assert('no demo notes', MTA.store.notes().length === 0);
+assert('no demo tasks', MTA.store.tasks().length === 0);
+assert('no demo events', MTA.store.events().length === 0);
+assert('no demo activity', MTA.store.activity().length === 0);
+
+/* --- Timestamp regression: U.toDate must preserve time-of-day ---
+   Stored activity timestamps are ISO 8601 UTC strings. U.toDate must
+   keep the exact instant (so displays show the real creation time) and
+   must NOT collapse them to midnight. This bug made every Activity
+   timestamp appear as 00:00 / "1d ago" regardless of creation time. */
+(function () {
+  const iso = '2026-09-06T20:10:32.000Z';
+  const d = MTA.utils.toDate(iso);
+  assert('toDate preserves ISO time-of-day', !!d && d.getUTCFullYear() === 2026 && d.getUTCMonth() === 8 && d.getUTCDate() === 6 && d.getUTCHours() === 20 && d.getUTCMinutes() === 10 && d.getUTCSeconds() === 32);
+
+  const isoMidnight = MTA.utils.toDate('2026-09-06T00:00:00.000Z');
+  assert('toDate handles ISO midnight', !!isoMidnight && isoMidnight.getUTCHours() === 0);
+
+  const dateOnly = MTA.utils.toDate('2026-09-06');
+  assert('toDate keeps date-only as local midnight', !!dateOnly && dateOnly.getFullYear() === 2026 && dateOnly.getMonth() === 8 && dateOnly.getDate() === 6 && dateOnly.getHours() === 0);
+
+  let threw = null;
+  try {
+    const f = MTA.utils.fmtDateTime('2026-09-06T20:10:32.000Z');
+    /* fmtDateTime formats the stored instant in the LOCAL timezone. We just
+       verify it reflects the real time (not collapsed to 00:00): the minutes
+       should be 10 (for UTC+14..-9 the local minute stays :10; extreme offsets
+       can carry, but it must never be 00:00 as the old bug produced). */
+    assert('fmtDateTime uses the stored clock time (not midnight)', typeof f === 'string' && !/T00:00| 00:00/.test(f));
+  } catch (e) { threw = e; assert('fmtDateTime does not throw', false, e.message); }
+  assert('fmtDateTime does not throw', threw === null);
+})();
 
 /* --- Corrupted data handling --- */
 localStorage.setItem('mta_projects', '{not valid json');
 assert('corruption recovered with fallback', Array.isArray(MTA.store.projects()));
 
-/* --- Auth: login --- */
-let r = MTA.auth.login('admin', 'admin123', false);
-assert('login with admin/admin123 succeeds', r.ok === true);
+/* --- Auth: initial setup + login --- */
+let r = MTA.auth.createFirstAccount({});
+assert('setup requires details', r.ok === false && !!r.error);
+
+r = MTA.auth.createFirstAccount({ displayName: 'Super Admin', username: 'admin', password: 'admin123', confirmPassword: 'admin123' });
+assert('setup creates first account', r.ok === true);
+const seededAdmin = MTA.store.users().find(u => u.username === 'admin');
+assert('first account is Super Admin', !!seededAdmin && seededAdmin.role === 'super_admin');
+assert('first account gets full permissions', Array.isArray(seededAdmin.permissions) && seededAdmin.permissions.length === 8);
+assert('password is hashed (no plain text)', typeof seededAdmin.password === 'string' && seededAdmin.password !== 'admin123');
+
+r = MTA.auth.createFirstAccount({ displayName: 'Second User', username: 'user2', password: 'secret123', confirmPassword: 'secret123' });
+assert('setup blocked after first account', r.ok === false);
+
+r = MTA.auth.login('admin', 'admin123', false);
+assert('login with created account succeeds', r.ok === true);
 assert('currentUser set', MTA.state.currentUser && MTA.state.currentUser.username === 'admin');
 assert('lastLogin updated', !!MTA.store.users().find(u => u.username === 'admin').lastLogin);
 
@@ -287,7 +325,12 @@ assert('clear selected empties collections', MTA.store.tasks().length === 0 && M
 
 /* --- Reset --- */
 MTA.store.resetApplication();
-assert('reset reseeds data', MTA.store.users().length === 1 && MTA.store.projects().length >= 4);
+assert('reset clears users', MTA.store.users().length === 0);
+assert('reset clears demo data', MTA.store.projects().length === 0 && MTA.store.notes().length === 0 &&
+  MTA.store.tasks().length === 0 && MTA.store.events().length === 0 && MTA.store.activity().length === 0);
+assert('reset does not recreate default admin', MTA.store.users().find(u => u.username === 'admin') === undefined);
+r = MTA.auth.createFirstAccount({ displayName: 'Super Admin', username: 'admin', password: 'admin123', confirmPassword: 'admin123' });
+assert('setup works after reset', r.ok === true);
 
 /* --- Password change --- */
 let pw = MTA.auth.changePassword(MTA.store.users()[0], 'admin123', 'newpass6');
@@ -395,7 +438,28 @@ try {
   } catch (e) {
     assert('MO.drawer does not throw', false, e.message);
   }
-  assert('MO.drawer does not throw', threw === null);
+  /* Drawer footer handled too. Footer buttons live in the drawer FOOT,
+     not the body — onMount must be able to reach them, otherwise
+     Edit/Delete buttons were rendered dead (calendar & projects bug). */
+  threw = null;
+  try {
+    const d = MTA.modal.drawer({
+      title: 'Footer regression',
+      body: MTA.utils.el('div', {}),
+      footer: '<button id="drw-edit">Edit</button><button id="drw-del">Delete</button>',
+      onMount(a) {
+        if (!a || !a.footer) throw new Error('drawer api missing footer element');
+        if (!a.element || !a.body || typeof a.close !== 'function') throw new Error('drawer api incomplete');
+        MTA.utils.$('#drw-edit', a.footer).addEventListener('click', () => {});
+        MTA.utils.$('#drw-del', a.footer).addEventListener('click', () => {});
+      }
+    });
+    if (!(d && d.footer)) throw new Error('drawer api missing footer element');
+    d.close();
+  } catch (e) {
+    threw = e;
+  }
+  assert('MO.drawer footer wiring does not throw', threw === null, threw && threw.message);
 })();
 
 /* --- Summary --- */

@@ -142,125 +142,24 @@
   S.meta = function () { return S.get(KEYS.meta, null); };
 
   /* ============================================================
-     Seeding (first run only)
+     Seeding (first run only - no default account, no demo data)
      ============================================================ */
-  function daysAgo(n, hour, min) {
-    var d = new Date();
-    d.setDate(d.getDate() - n);
-    if (hour != null) d.setHours(hour, min || 0, 0, 0);
-    else d.setHours(9 + (n % 8), (n * 13) % 60, 0, 0);
-    return d;
-  }
-  function iso(d) { return d.toISOString(); }
-  function dayStr(n) {
-    var d = daysAgo(n);
-    return U.dateStr(d);
-  }
 
   S.seed = function () {
     var now = new Date();
-    var adminId = 'usr_admin1';
-    var users = [{
-      id: adminId,
-      username: 'admin',
-      displayName: 'Super Admin',
-      password: U.hashPassword('admin123'),
-      role: 'super_admin',
-      status: 'active',
-      permissions: ['dashboard', 'projects', 'devnote', 'tasks', 'activity', 'calendar', 'admins', 'settings'],
-      avatar: null,
-      avatarColor: 0,
-      createdAt: iso(daysAgo(120)),
-      lastLogin: null
-    }];
-
-    /* ---- Projects ---- */
-    var projects = [
-
-    ];
-
-    /* ---- Tasks ---- */
-    var tasks = [
-    
-    ];
-
-    /* ---- Notes ---- */
-    var notes = [
-      
-    ];
-
-    /* ---- Calendar events ---- */
-    function ev(id, title, dayOff, startHour, endHour, color, desc) {
-      var sd = daysAgo(dayOff);
-      sd.setHours(startHour, 0, 0, 0);
-      var ed = new Date(sd.getTime());
-      ed.setHours(endHour, 0, 0, 0);
-      return {
-        id: id, title: title, description: desc || '', allDay: false,
-        start: sd.toISOString(), end: ed.toISOString(),
-        color: color || 1, createdAt: iso(daysAgo(25)), updatedAt: iso(daysAgo(25))
-      };
-    }
-    var events = [
-      ev('ev_1', 'Standup', 1, 9, 10, 1, 'Daily team standup.'),
-      ev('ev_2', 'Design review', 2, 14, 15, 2, 'Charts and palette review.'),
-      ev('ev_3', 'Release planning', -2, 10, 11, 3, 'Plan next release scope.'),
-      ev('ev_4', 'One on one with Mina', 4, 11, 12, 5, 'Career check-in.'),
-      ev('ev_5', 'Infra maintenance', 6, 22, 23, 4, 'Scheduled downtime window.'),
-      ev('ev_6', 'Architecture sync', -5, 13, 14, 2, 'Gateway providers discussion.'),
-      { id: 'ev_7', title: 'Sprint demo', description: 'Show the tooling progress.', allDay: true, start: dayStr(8), end: dayStr(8), color: 2, createdAt: iso(daysAgo(20)), updatedAt: iso(daysAgo(20)) },
-      ev('ev_8', 'Team lunch', -1, 12, 13, 6, 'Monthly team lunch.')
-    ];
-
-    /* ---- Activity log (derived from the seeded operations) ---- */
-    var activity = [];
-    function track(type, action, userId, ts, extra) {
-      activity.push(Object.assign({
-        id: U.uid('act'),
-        type: type,
-        action: action,
-        userId: userId || adminId,
-        timestamp: ts || new Date().toISOString()
-      }, extra || {}));
-    }
-    track('login', 'Signed in to the dashboard', adminId, iso(daysAgo(30)));
-    track('settings', 'Installed sample workspace', adminId, iso(daysAgo(30)));
-
-    projects.forEach(function (p) {
-      track('project_create', 'Created project ' + p.name, adminId, p.createdAt, { entityType: 'project', entityId: p.id });
-      track('project_edit', 'Edited project ' + p.name, adminId, p.updatedAt, { entityType: 'project', entityId: p.id });
-    });
-    tasks.forEach(function (t) {
-      var pname = (projects.find(function (x) { return x.id === t.projectId; }) || {}).name || 'Project';
-      track('task_create', 'Created task ' + t.title, adminId, t.createdAt, { entityType: 'task', entityId: t.id, project: pname });
-      if (t.completedAt) {
-        track('task_complete', 'Completed task ' + t.title, adminId, t.completedAt, { entityType: 'task', entityId: t.id, project: pname });
-      }
-    });
-    notes.forEach(function (x) {
-      track('note_create', 'Created note ' + x.title, adminId, x.createdAt, { entityType: 'note', entityId: x.id });
-      track('note_edit', 'Edited note ' + x.title, adminId, x.updatedAt, { entityType: 'note', entityId: x.id });
-    });
-    events.forEach(function (x) {
-      track('event_create', 'Created event ' + x.title, adminId, x.createdAt, { entityType: 'event', entityId: x.id });
-    });
-    ['dashboard', 'projects', 'devnote', 'tasks', 'calendar', 'activity'].forEach(function (pg, i) {
-      track('navigation', 'Opened ' + pg + ' section', adminId, iso(daysAgo(28 - i * 4)), { page: pg });
-    });
-
-    activity.sort(function (a, b) { return a.timestamp < b.timestamp ? 1 : -1; });
-
-    /* ---- Save seed & summary ---- */
     var settings = S.defaultSettings();
-    settings.profile.displayName = 'Super Admin';
-    settings.profile.username = 'admin';
 
-    S.saveUsers(users);
-    S.saveProjects(projects);
-    S.saveTasks(tasks);
-    S.saveNotes(notes);
-    S.saveEvents(events);
-    S.saveActivity(activity);
+    /* The app starts EMPTY on purpose:
+       - No predefined users - the first account is created through the
+         Initial Setup screen and automatically becomes Super Admin.
+       - No demo projects / tasks / notes / events / activity records.
+       Only defaults (settings, theme, meta) are initialized here. */
+    S.saveUsers([]);
+    S.saveProjects([]);
+    S.saveTasks([]);
+    S.saveNotes([]);
+    S.saveEvents([]);
+    S.saveActivity([]);
     S.saveSettings(settings);
     S.saveTheme('ivory');
     S.set(KEYS.meta, { v: VERSION, app: 'mta-devdashboard', seededAt: now.toISOString() });
@@ -273,26 +172,9 @@
       S.seed();
       return { seeded: true };
     }
-    /* Ensure collections that vanished still have a default admin. */
     if (meta.v < VERSION) {
       meta.v = VERSION;
       S.set(KEYS.meta, meta);
-    }
-    var users = S.users();
-    if (!users.length) {
-      S.saveUsers([{
-        id: 'usr_admin1',
-        username: 'admin',
-        displayName: 'Super Admin',
-        password: U.hashPassword('admin123'),
-        role: 'super_admin',
-        status: 'active',
-        permissions: ['dashboard', 'projects', 'devnote', 'tasks', 'activity', 'calendar', 'admins', 'settings'],
-        avatar: null,
-        avatarColor: 0,
-        createdAt: new Date().toISOString(),
-        lastLogin: null
-      }]);
     }
     var st = S.settings();
     if (!st || !st.appearance) S.saveSettings(S.defaultSettings());

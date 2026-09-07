@@ -22,25 +22,67 @@
     main = main || document.getElementById('app-main');
 
     var isLock = mode === 'lock';
+    /* Initial setup screen: shown when no account exists yet. It is the
+       ONLY way in — refreshing or navigating never bypasses it. */
+    var isSetup = mode === 'setup' || (mode !== 'lock' && MTA.store.users().length === 0);
     authView.hidden = false;
     shell.hidden = true;
 
     var sub = document.getElementById('auth-sub');
     if (isLock) sub.innerHTML = '<span class="lock-badge-chip">' + U.icon('ic-lock') + ' Session locked</span>';
+    else if (isSetup) sub.textContent = 'Create your first administrator account';
     else sub.textContent = 'Sign in to your developer workspace';
 
-    authBox.innerHTML = isLock ? lockFormHtml() : loginFormHtml();
+    authBox.innerHTML = isLock ? lockFormHtml() : isSetup ? setupFormHtml() : loginFormHtml();
 
     var form = authBox.querySelector('form');
     if (form) {
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        submitAuth(isLock, authBox);
+        if (isSetup) submitSetup(authBox);
+        else submitAuth(isLock, authBox);
       });
       var first = authBox.querySelector('input');
       setTimeout(function () { first && first.focus(); }, 40);
     }
   };
+
+  /* Initial Setup form — first visit with zero users. */
+  function setupFormHtml() {
+    return '<form class="auth-form" autocomplete="on">' +
+      '<div class="field"><label class="field-label" for="au-name">Display name</label>' +
+        '<input class="input" id="au-name" name="displayName" autocomplete="name" required placeholder="e.g. Alex Developer"></div>' +
+      '<div class="field"><label class="field-label" for="au-user">Username</label>' +
+        '<input class="input" id="au-user" name="username" autocomplete="username" required minlength="3" maxlength="30" placeholder="username"></div>' +
+      '<div class="field"><label class="field-label" for="au-pass">Password</label>' +
+        '<div class="row pw-row"><input class="input" id="au-pass" name="password" type="password" autocomplete="new-password" required minlength="6" placeholder="at least 6 characters">' +
+        '<button type="button" class="pw-toggle js-pw" aria-label="Show password">' + U.icon('ic-eyeoff') + '</button></div></div>' +
+      '<div class="field"><label class="field-label" for="au-cpass">Confirm password</label>' +
+        '<div class="row pw-row"><input class="input" id="au-cpass" name="confirmPassword" type="password" autocomplete="new-password" required minlength="6" placeholder="repeat password">' +
+        '<button type="button" class="pw-toggle js-pw" aria-label="Show password">' + U.icon('ic-eyeoff') + '</button></div></div>' +
+      '<div class="auth-note" role="note" style="margin:6px 0 10px">This first account gets Super Admin access to every section.</div>' +
+      '<div class="auth-error" id="auth-error" hidden></div>' +
+      '<button class="btn btn-primary btn-lg btn-block" type="submit">' + U.icon('ic-user') + ' Create account</button>' +
+    '</form>';
+  }
+
+  /* Initial Setup submit — creates the Super Admin and signs in. */
+  function submitSetup(box) {
+    var errBox = box.querySelector('#auth-error');
+    var res = MTA.auth.createFirstAccount({
+      displayName: box.querySelector('#au-name').value,
+      username: box.querySelector('#au-user').value,
+      password: box.querySelector('#au-pass').value,
+      confirmPassword: box.querySelector('#au-cpass').value
+    });
+    if (!res.ok) { showAuthError(errBox, res.error); return; }
+
+    var loginRes = MTA.auth.login(res.user.username, box.querySelector('#au-pass').value, true);
+    if (!loginRes.ok) { showAuthError(errBox, loginRes.error); return; }
+
+    MTA.toast('Welcome, ' + (loginRes.user.displayName || loginRes.user.username), 'success');
+    APP.bootApp();
+  }
 
   function loginFormHtml() {
     var remember = MTA.state.settings && MTA.state.settings.security
@@ -759,8 +801,12 @@
     if (dirty) MTA.store.saveUsers(users);
 
     var hasSession = MTA.auth.resume();
+    var hasUsers = MTA.store.users().length > 0;
 
-    if (hasSession && !MTA.state.locked) {
+    if (!hasUsers) {
+      /* First run or full reset: create the initial account. */
+      APP.showAuth('setup');
+    } else if (hasSession && !MTA.state.locked) {
       setTimeout(function () {
         boot();
         APP.renderHeader();

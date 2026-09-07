@@ -502,7 +502,7 @@
         '<button class="btn" id="st-reset-settings">' + U.icon('ic-refresh') + ' Reset settings</button>' +
         '<button class="btn btn-danger" id="st-reset-app">' + U.icon('ic-alert') + ' Reset application</button>' +
       '</div>' +
-      '<div class="field-hint" style="margin-top:8px">Reset application deletes everything (admins, projects, notes, tasks, events, activity) and restores the sample workspace.</div>';
+      '<div class="field-hint" style="margin-top:8px">Reset application deletes everything (admins, projects, notes, tasks, events, activity) and returns the app to the initial setup screen.</div>';
 
     var debug = {
       version: '1.0.0',
@@ -539,7 +539,7 @@
     });
 
     U.$('#st-reset-app', card).addEventListener('click', function () {
-      MTA.modal.confirm({ title: 'Reset application', message: 'Delete ALL local data and restore the sample workspace? This cannot be undone.', danger: true, confirmLabel: 'Reset' })
+      MTA.modal.confirm({ title: 'Reset application', message: 'Delete ALL local data and return to the initial setup screen? This cannot be undone.', danger: true, confirmLabel: 'Reset' })
         .then(function (ok) {
           if (!ok) return;
           MTA.store.resetApplication();

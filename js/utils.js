@@ -149,14 +149,20 @@
     return Math.round((U.startOfDay(b).getTime() - U.startOfDay(a).getTime()) / 86400000);
   };
 
-  /* Convert any stored value (Date | ISO | 'YYYY-MM-DD') to a Date. */
+  /* Convert any stored value (Date | number | ISO datetime | 'YYYY-MM-DD') to a Date.
+     - Date / number         -> preserved as-is
+     - full timestamp string (e.g. ISO '2026-09-06T20:10:32.000Z')
+                              -> parsed with Date(string) so the TIME-OF-DAY is kept.
+     - bare date 'YYYY-MM-DD' -> local midnight (consistent with parseDay)
+     IMPORTANT: never use Date(string) for bare date strings — 'YYYY-MM-DD'
+     is treated as UTC midnight by the spec and shifts the day in non-UTC zones. */
   U.toDate = function (v) {
     if (!v) return null;
     if (v instanceof Date) return v;
     if (typeof v === 'number') return new Date(v);
-    var m = String(v).match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ].*)?$/);
-    if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
-    var d = new Date(v);
+    var s = String(v);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return new Date(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10));
+    var d = new Date(s);
     return isNaN(d.getTime()) ? null : d;
   };
 

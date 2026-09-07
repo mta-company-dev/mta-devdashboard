@@ -11,6 +11,9 @@
 
   var SESSION_KEY = 'mta_session';
 
+  /* Every permission granted to the first (Super Admin) account. */
+  var FULL_PERMISSIONS = ['dashboard', 'projects', 'devnote', 'tasks', 'activity', 'calendar', 'admins', 'settings'];
+
   function writeSession(sess, remember) {
     try {
       var json = JSON.stringify(sess);
@@ -73,6 +76,52 @@
   A.usernameTaken = function (username, excludeId) {
     var u = A.findByUsername(username);
     return !!u && u.id !== excludeId;
+  };
+
+  /* ---------- Initial setup (first account) ---------- */
+  /* Create the very first account. Only allowed while there are zero
+     users. The account always becomes the active Super Admin with full
+     permissions. Passwords are stored hashed (never plain text). */
+  A.createFirstAccount = function (data) {
+    data = data || {};
+    if (MTA.store.users().length > 0) {
+      return { ok: false, error: 'An initial account has already been created.' };
+    }
+    var displayName = String(data.displayName || '').trim();
+    var username = String(data.username || '').trim();
+    var password = String(data.password || '');
+    var confirmPassword = String(data.confirmPassword || '');
+
+    if (!displayName) return { ok: false, error: 'Display name is required.' };
+    if (username.length < 3 || username.length > 30 || !/^[A-Za-z0-9_.-]+$/.test(username)) {
+      return { ok: false, error: 'Username must be 3–30 characters and use only letters, numbers, dots, dashes or underscores.' };
+    }
+    if (password.length < 6) {
+      return { ok: false, error: 'Password must be at least 6 characters.' };
+    }
+    if (password !== confirmPassword) {
+      return { ok: false, error: 'Passwords do not match.' };
+    }
+
+    var now = new Date().toISOString();
+    var user = {
+      id: U.uid('usr'),
+      username: username,
+      displayName: displayName,
+      password: U.hashPassword(password),
+      role: 'super_admin',
+      status: 'active',
+      permissions: FULL_PERMISSIONS.slice(),
+      avatar: null,
+      avatarColor: 0,
+      createdAt: now,
+      lastLogin: null
+    };
+    var users = MTA.store.users();
+    users.push(user);
+    MTA.store.saveUsers(users);
+    MTA.state.setUser(user);
+    return { ok: true, user: user };
   };
 
   /* ---------- Login / logout ---------- */

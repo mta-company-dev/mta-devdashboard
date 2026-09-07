@@ -208,7 +208,7 @@
       if (e.target === dim) close();
     });
 
-    var api = { element: drawer, close: close, body: bodyEl };
+    var api = { element: drawer, close: close, body: bodyEl, footer: footEl };
     if (opts.onMount) opts.onMount(api);
     return api;
   };
