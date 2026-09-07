@@ -799,3 +799,24 @@ select {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================
+   MOBILE — HIDE SIDEBAR
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  .sidebar {
+    display: none !important;
+  }
+
+  #app-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  #shell {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+}
