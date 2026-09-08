@@ -231,6 +231,18 @@
         return;
       }
       if (e.target.closest('.js-tag')) { viewState.q = e.target.closest('.js-tag').dataset.q; D.render(main); return; }
+      var pinBtn = e.target.closest('[data-pin-t]');
+      if (pinBtn) {
+        D.togglePin(pinBtn.dataset.pinT);
+        D.render(main);
+        return;
+      }
+      var favBtn = e.target.closest('[data-fav-t]');
+      if (favBtn) {
+        D.toggleFav(favBtn.dataset.favT);
+        D.render(main);
+        return;
+      }
       var dupBtn = e.target.closest('[data-dup]');
       if (dupBtn) {
         var dup = D.duplicate(dupBtn.dataset.dup);
@@ -247,6 +259,7 @@
             if (!ok) return;
             D.remove(delId);
             MTA.toast('Note deleted', 'warning', 'Deleted');
+            if (currentEditor && currentEditor.noteId === delId) currentEditor = null;
             D.render(main);
           });
         return;
@@ -329,12 +342,13 @@
       markDirty(); debouncedSave();
     });
 
-    /* click handlers re-bound via main delegate; save before re-render */
+    /* Save pending edits first, then let the main delegate perform the
+       action (duplicate / delete / pin / fav). Do NOT stopPropagation —
+       that swallows the click before it ever reaches the delegate. */
     ['[data-pin-t]', '[data-fav-t]', '[data-del-note]', '[data-dup]'].forEach(function (sel) {
       var el = panel.querySelector(sel);
       if (el) {
-        el.addEventListener('click', function (e) {
-          e.stopPropagation();
+        el.addEventListener('click', function () {
           pushSave();
         });
       }

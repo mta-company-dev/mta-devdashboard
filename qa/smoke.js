@@ -270,8 +270,15 @@ const n1 = MTA.devnote.create({ title: 'Smoke Note', content: '<p>Hello</p>' });
 assert('note created', MTA.devnote.get(n1.id).title === 'Smoke Note');
 MTA.devnote.update(n1.id, { pinned: true, category: 'Research' });
 assert('note pinned + categorised', MTA.devnote.get(n1.id).pinned === true && MTA.devnote.get(n1.id).category === 'Research');
+MTA.devnote.togglePin(n1.id);
+assert('note unpinned via toggle', MTA.devnote.get(n1.id).pinned === false);
+MTA.devnote.toggleFav(n1.id);
+assert('note favorited via toggle', MTA.devnote.get(n1.id).favorite === true);
+MTA.devnote.toggleFav(n1.id);
+assert('note unfavorited via toggle', MTA.devnote.get(n1.id).favorite === false);
 const dup = MTA.devnote.duplicate(n1.id);
 assert('note duplicated', !!dup && dup.title.indexOf('(copy)') >= 0 && dup.id !== n1.id);
+assert('duplicate is a copy with pin cleared', dup.title.indexOf(n1.title) === 0 && dup.pinned === false);
 MTA.devnote.remove(n1.id); MTA.devnote.remove(dup.id);
 assert('notes deleted', !MTA.devnote.get(n1.id) && !MTA.devnote.get(dup.id));
 
