@@ -33,7 +33,7 @@ All application data is stored locally in the browser using **`localStorage`**.
 
 ### 🚀 Public Dashboard
 
-**https://mta-company-dev.github.io/mta-devdashboard/**
+**https://mta2931.github.io/mta-devdashboard/**
 
 You can open the dashboard directly in any modern browser.
 
